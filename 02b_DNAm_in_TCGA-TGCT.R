@@ -64,7 +64,7 @@ targets$TAF7L.expression <- ifelse(targets$TAF7L.mRNA > cut, "above median", "be
 heat_annot <- data.frame(
   row.names = targets$Sample_ID,
   stage     = targets$stage,
-  race      = targets$race,
+  # race      = targets$race,
   TAF7L.mutation = ifelse(targets$Sample_ID == "TCGA-S6-A8JY", "yes", "no"),
   TAF7L.CN = factor(targets$TAF7L.CN),
   TAF7L.expression = targets$TAF7L.expression
@@ -79,7 +79,7 @@ ann_colors <- list(
   TSS = c(yes="black", no="lightgray"),
   TAF7L.CN = c(`-1`="skyblue",`0`="lightgray",`1`="salmon"),
   TAF7L.expression = c(`above median`="salmon", `below median`="skyblue"),
-  race = c(Asian="pink", `Black or African American`="green", `Not reported`="lightgray", White="orange"),
+  # race = c(Asian="pink", `Black or African American`="green", `Not reported`="lightgray", White="orange"),
   Context = c(Island="purple", N_Shore=gradient_cols[4], S_Shore=gradient_cols[8], N_Shelf=gradient_cols[3],S_Shelf=gradient_cols[7],OpenSea=gradient_cols[1])
 )
 sum(rownames(tgct.betas) %in% cpg_info$cgID) #20
@@ -95,7 +95,7 @@ res <- pheatmap(
   clustering_distance_cols = "manhattan",
   clustering_method = "average",
   border_color = NA,
-  color = colorRampPalette(c("blue", "yellow"))(1024),
+  color = colorRampPalette(c("yellow","blue"))(1024),
   fontsize = 7.5, 
   cutree_cols = 2
 )
@@ -110,7 +110,7 @@ pheatmap(
   clustering_distance_cols = "manhattan",
   clustering_method = "average",
   border_color = NA,
-  color = colorRampPalette(c("blue","yellow"))(1024),
+  color = colorRampPalette(c("yellow","blue"))(1024),
   fontsize = 7.5
 )
 
@@ -124,7 +124,7 @@ targets <- merge(targets, samp.clust.df, by="Sample_ID")
 heat_annot <- data.frame(
   row.names = targets$Sample_ID,
   stage     = targets$stage,
-  race      = targets$race,
+  # race      = targets$race,
   TAF7L.mutation = ifelse(targets$Sample_ID == "TCGA-S6-A8JY", "yes", "no"),
   TAF7L.CN = factor(targets$TAF7L.CN),
   TAF7L.expression = targets$TAF7L.expression,
@@ -140,7 +140,7 @@ pheatmap(
   clustering_distance_cols = "manhattan",
   clustering_method = "average",
   border_color = NA,
-  color = colorRampPalette(c("blue", "yellow"))(1024),
+  color = colorRampPalette(c("yellow","blue"))(1024),
   fontsize = 7.5
 )
 

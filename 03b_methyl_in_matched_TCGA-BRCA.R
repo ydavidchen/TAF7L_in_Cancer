@@ -2,7 +2,7 @@
 # TAF7L methylation in TCGA-BRCA primary tumor vs. matched normal adjacent
 # Script author: David Chen
 # Date: 06/30/2017
-# Revision for manuscript: 07/30/2017
+# Revision for manuscript: 07/30/2017; 08/03/2017
 # Notes:
 # 1. Goal: to provide evidence that TAF7L is an oncogene
 ##########################################################################################################################
@@ -29,9 +29,9 @@ targets$stage[targets$pathol_stage %in% c("stage i", "stage ia", "stage ib","sta
 targets$stage[targets$pathol_stage %in% c("stage iiia", "stage iiib", "stage iiic","stage iv")] <- "Stage III-IV";
 
 ## Update capitalization of race info:
-targets$race[targets$race=="white"] <- "White";
-targets$race[targets$race=="black or african american"] <- "Black or African American";
-targets$race[targets$race=="asian"] <- "Asian"
+# targets$race[targets$race=="white"] <- "White";
+# targets$race[targets$race=="black or african american"] <- "Black or African American";
+# targets$race[targets$race=="asian"] <- "Asian"
 
 ## Update capitalization of tissue context:
 targets$tissue.definition <- tolower(targets$tissue.definition)
@@ -47,11 +47,13 @@ betas_matched <- betas_matched[ , colnames(betas_matched) %in% targets$Sample_ID
 targets <- merge(targets, gdac_profiles, all.x=TRUE, by="Sample_ID")
 
 median(targets$TAF7L.mRNA, na.rm=T)
+## [1] -0.0015
+
 plot(sort(targets$TAF7L.mRNA))
 heat_annot <- data.frame(
   row.names   = targets$Sample_ID,
   stage       = targets$stage,
-  race        = targets$race,
+  # race        = targets$race,
   tissue = targets$tissue.definition,
   TAF7L.CN= factor(targets$TAF7L.copy.num),
   TAF7L.expression = ifelse(targets$TAF7L.mRNA > 0, "above 0", "below 0")
@@ -65,7 +67,7 @@ ann_colors <- list(
   TSS = c(yes="black", no="lightgray"),
   TAF7L.CN= c(`-1`="skyblue",`0`="lightgray",`1`="salmon"),
   TAF7L.expression = c(`above 0`="salmon", `below 0`="skyblue"),
-  race = c(Asian="pink", `Black or African American`="green", `Not reported`="lightgray", White="orange"),
+  # race = c(Asian="pink", `Black or African American`="green", `Not reported`="lightgray", White="orange"),
   tissue = c(`primary solid tumor`="purple", `solid tissue normal`=gradient_cols[4]),
   context = c(Island="purple", N_Shore=gradient_cols[4], S_Shore=gradient_cols[8], N_Shelf=gradient_cols[3],S_Shelf=gradient_cols[7],OpenSea=gradient_cols[1])
 )
@@ -80,7 +82,7 @@ pheatmap(
   clustering_method = "average",
   border_color = NA,
   # main = 'Methylation (beta-values) of 20 TAF7L CpGs across 90 pairs of matched normal and primary solid breast tumors',
-  color = colorRampPalette(c("blue", "yellow"))(1024),
+  color = colorRampPalette(c("yellow", "blue"))(1024),
   fontsize = 7.5
 )
 pheatmap(
@@ -94,7 +96,7 @@ pheatmap(
   clustering_method = "average",
   border_color = NA,
   # main = 'Methylation (beta-values) of 13 promoter TAF7L CpGs across 90 pairs of matched normal and primary solid breast tumors',
-  color = colorRampPalette(c("blue", "yellow"))(1024),
+  color = colorRampPalette(c("yellow", "blue"))(1024),
   fontsize = 7.5
 )
 
@@ -114,6 +116,6 @@ pheatmap(
   clustering_distance_cols = "manhattan",
   clustering_method = "average",
   border_color = NA,
-  color = colorRampPalette(c("blue", "yellow"))(1024),
+  color = colorRampPalette(c("yellow","blue"))(1024),
   main = 'Most variable 6000 CpGs across 90 pairs of matched normal and primary solid breast tumors'
 )
