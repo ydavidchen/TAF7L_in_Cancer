@@ -2,7 +2,7 @@
 # Visualization of CpG methylation in TCGA-TGCT
 # Script author: David Chen
 # Original date: 06/29/2017
-# Revision for manuscript: 07/30/2017; 08/02/2017
+# Revision for manuscript: 08/05/2017
 # Notes:
 ##########################################################################################################################
 
@@ -69,16 +69,17 @@ heat_annot <- data.frame(
   TAF7L.CN = factor(targets$TAF7L.CN),
   TAF7L.expression = targets$TAF7L.expression
 );
+colnames(heat_annot) <- gsub(".", " ", colnames(heat_annot), fixed=TRUE)
 row_annot <- data.frame(
   row.names = annot.450k$Name,
   TSS  = ifelse(grepl("TSS", annot.450k$UCSC_RefGene_Group), "yes", "no" ),
   Context = annot.450k$Relation_to_Island
 )
 ann_colors <- list(
-  TAF7L.mutation = c(yes="black", no="lightgray"),
+  `TAF7L mutation` = c(yes="black", no="lightgray"),
   TSS = c(yes="black", no="lightgray"),
-  TAF7L.CN = c(`-1`="skyblue",`0`="lightgray",`1`="salmon"),
-  TAF7L.expression = c(`above median`="salmon", `below median`="skyblue"),
+  `TAF7L CN` = c(`-1`="skyblue",`0`="lightgray",`1`="salmon"),
+  `TAF7L expression` = c(`above median`="salmon", `below median`="skyblue"),
   # race = c(Asian="pink", `Black or African American`="green", `Not reported`="lightgray", White="orange"),
   Context = c(Island="purple", N_Shore=gradient_cols[4], S_Shore=gradient_cols[8], N_Shelf=gradient_cols[3],S_Shelf=gradient_cols[7],OpenSea=gradient_cols[1])
 )
@@ -96,9 +97,10 @@ res <- pheatmap(
   clustering_method = "average",
   border_color = NA,
   color = colorRampPalette(c("yellow","blue"))(1024),
-  fontsize = 7.5, 
+  fontsize = 10, 
   cutree_cols = 2
 )
+
 ## 13 TAF7L promoter CpGs:
 pheatmap(
   tgct.betas[rownames(tgct.betas) %in% cpg_info$cgID[grepl("TSS",cpg_info$Context)], ],
@@ -111,7 +113,7 @@ pheatmap(
   clustering_method = "average",
   border_color = NA,
   color = colorRampPalette(c("yellow","blue"))(1024),
-  fontsize = 7.5
+  fontsize = 12
 )
 
 ## Extract group information:
@@ -130,6 +132,11 @@ heat_annot <- data.frame(
   TAF7L.expression = targets$TAF7L.expression,
   methylation.cluster = as.factor(targets$methylation.cluster)
 );
+colnames(heat_annot) <- gsub(".", " ", colnames(heat_annot), fixed=TRUE)
+
+
+setEPS();
+postscript("~/Dropbox (Christensen Lab)/Christensen Lab - 2017/TAF7L_in_Testicular_Cancer/CaseReport_ms/Figures/080517_Figure1A.eps", width=10, height=9); 
 pheatmap(
   tgct.betas[rownames(tgct.betas) %in% cpg_info$cgID, ],
   show_colnames = FALSE, #samples
@@ -141,8 +148,9 @@ pheatmap(
   clustering_method = "average",
   border_color = NA,
   color = colorRampPalette(c("yellow","blue"))(1024),
-  fontsize = 7.5
+  fontsize = 9 #10 for RStudio Export
 )
+dev.off()
 
 ## Fisher test: 
 sum(! is.na(targets$TAF7L.mRNA))
